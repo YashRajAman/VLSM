@@ -74,7 +74,7 @@ def vlsm(ipaddr,hosts):
     for x in range(len(hosts)):
         bits = min_pow2(hosts[x]+2)
         ipaddr = getnet(ipaddr,getmask(int(32-bits)))
-        print "SUBNET:", x, "NEEDED:", hosts[x], "\tALLOCATED", int(pow(2, bits)), "\tADDRESS:", norm(ipaddr), \
+        print "SUBNET:", x+1, "NEEDED:", hosts[x], "\tALLOCATED", int(pow(2, bits)), "\tADDRESS:", norm(ipaddr), \
         "\tMASK:", 32-bits, "(", norm(getmask(int(32-bits))), ")"
         ipaddr = getnextaddr(ipaddr,getmask(int(32-bits)))
 
