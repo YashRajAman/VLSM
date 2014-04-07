@@ -12,3 +12,4 @@
 - include additional info, such as:
         * acl friendly wildcard for the mask
         * min host, max host for each subnet
+- introduce exceptions and input validation
