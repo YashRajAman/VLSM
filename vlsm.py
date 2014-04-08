@@ -1,21 +1,25 @@
 #!/usr/bin/env python
 
-from math import pow
+from math import pow, ceil, log
 from sys import argv
 
 
-def min_pow2(x, z=1):                           # ex. 31 -> 2^5 = 32
-    while pow(2, z) <= x-1:                     # ex.  6 -> 2^3 = 8
-        z += 1
-    return z
+def min_pow2(x):                            # how many bits do we need to borrow
+    z = log(x,2)                            # to cover number of hosts
+    if int(z) != z:                         # in math language:
+        z = ceil(z)                         # to which integer power do
+    return int(z)                           # we need to raise 2 to get the number that is ge "x"
 
 
-def getmask(cidr):                            # ex. 24 -> 255.255.255.0
-    arr = [0 for i in range(4)]               # creating list of four 0s
-    y = int(cidr / 8)                         # how many octets of 255
-    for z in range(y):
-        arr[z] = 255
-    arr[z + 1] = int(256 - pow(2, 8 - (cidr - 8 * y)))
+def getmask(cidr):                          # ex. 24 -> 255.255.255.0
+    arr = [0 for i in range(4)]             # creating list of four 0s
+    y = int(cidr / 8)                       # how many octets of 255
+    if y > 0:                               # if mask < 8
+        for z in range(y):
+            arr[z] = 255
+        arr[z + 1] = int(256 - pow(2, 8 - (cidr - 8 * y)))
+    else:
+        arr[0] = 256 - pow(2, 8-cidr)
     return arr
 
 
@@ -102,5 +106,5 @@ for x in range(len(argv[2:])):                      # list of str ['2','8','22',
 arg = sorted(arg, reverse=True)                     # sort (descending) list [2,8,22,54] -> [54,22,8,1]
 
 print
-vlsm(ip,arg)
+vlsm(getnet(ip,mask),arg)
 print
