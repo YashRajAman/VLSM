@@ -80,7 +80,7 @@ def vlsm(ipaddr,hosts):
         bits = min_pow2(hosts[x]+2)
         ipaddr = getnet(ipaddr,getmask(int(32-bits)))
 
-        print "SUBNET: %d NEEDED: %d (%d %% of) ALLOCATED %d ADDRESS: %s MASK: %d (%s)" % \
+        print "SUBNET: %d NEEDED: %4d (%3d %% of) ALLOCATED %4d ADDRESS: %15s MASK: %d (%15s)" % \
         (x+1,\
         hosts[x],\
         (hosts[x]*100)/(int(pow(2, bits))-2),\
@@ -131,3 +131,4 @@ print "Number of IP addresses needed: ", need
 print "Available IP addresses in allocated subnets: ", allc
 print "About %d%% of available major network address space is used" % (((allc+(len(arg)*2))*100)/(pow(2,32-int(cidr))-2))
 print "About %d%% of subnetted network address space is used" % (need*100/allc)
+print
