@@ -73,13 +73,24 @@ def norm (ipaddr):
 
 
 def vlsm(ipaddr,hosts):
-    global cidr
+    global cidr, need, allc
     bits = 0
+
     for x in range(len(hosts)):
         bits = min_pow2(hosts[x]+2)
         ipaddr = getnet(ipaddr,getmask(int(32-bits)))
-        print "SUBNET:", x+1, "NEEDED:", hosts[x], "\tALLOCATED", int(pow(2, bits)), "\tADDRESS:", norm(ipaddr), \
-        "\tMASK:", 32-bits, "(", norm(getmask(int(32-bits))), ")"
+
+        print "SUBNET: %d NEEDED: %d (%d %% of) ALLOCATED %d ADDRESS: %s MASK: %d (%s)" % \
+        (x+1,\
+        hosts[x],\
+        (hosts[x]*100)/(int(pow(2, bits))-2),\
+        int(pow(2, bits))-2,\
+        norm(ipaddr),\
+        32-bits,\
+        norm(getmask(int(32-bits))))
+
+        need += hosts[x]
+        allc += int(pow(2, bits))-2
         ipaddr = getnextaddr(ipaddr,getmask(int(32-bits)))
 
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -105,6 +116,18 @@ for x in range(len(argv[2:])):                      # list of str ['2','8','22',
 
 arg = sorted(arg, reverse=True)                     # sort (descending) list [2,8,22,54] -> [54,22,8,1]
 
+need=0
+allc=0
+
 print
 vlsm(getnet(ip,mask),arg)
 print
+
+print "STATISTICS"
+print "=========="
+print "Major Network: %s" % (argv[1])
+print "Available IP addresses in major network: %d" % (pow(2,32-int(cidr))-2)
+print "Number of IP addresses needed: ", need
+print "Available IP addresses in allocated subnets: ", allc
+print "About %d%% of available major network address space is used" % (((allc+(len(arg)*2))*100)/(pow(2,32-int(cidr))-2))
+print "About %d%% of subnetted network address space is used" % (need*100/allc)
