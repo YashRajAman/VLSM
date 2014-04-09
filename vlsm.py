@@ -139,6 +139,6 @@ print " Available IP addresses in major network: %d" % (pow(2, 32 - cidr) - 2)
 print " Number of IP addresses needed: ", need
 print " Available IP addresses in allocated subnets: ", allc
 print " About %d%% of available major network address space is used" % (
-    ((allc + (len(arg) * 2)) * 100) / (pow(2, 32 - cidr) - 2))
+    ((allc + (len(arg) * 2)) * 100) / (pow(2, 32 - cidr)))
 print " About %d%% of subnetted network address space is used" % (need * 100 / allc)
 print
