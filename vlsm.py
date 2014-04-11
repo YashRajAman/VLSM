@@ -2,6 +2,7 @@
 
 from math import pow, ceil, log
 from sys import argv
+import re
 
 
 def min_pow2(x):  # how many bits do we need to borrow
@@ -37,8 +38,6 @@ def getfirst(ipaddr):  # Get first usable address from ip and mask
 
 
 def getlast(ipaddr, nmask):  # Get last usable address from ip and mask
-    # addr = ipaddr[:]                            # list is mutable, not to change the global value
-    # global ip, mask
     addr = getbcast(ipaddr, nmask)
     addr[3] -= 1
     return addr
@@ -103,6 +102,12 @@ if argv[1] == "-h" or argv[1] == "--help":
     print "Subnets the initiallly provided network into subnetworks by the number of hosts needed in each."
     print
     exit(0)
+
+good = re.match("^(?:(?:(?:2[0-5][0-5]|1\d{2}|\d{2}|\d)\.){3}(?:[12]\d{2}|\d{2}|\d)\/(?:3[0-2]|[1-2]\d|\d))\
+(?:\ \d*)+$", " ".join(argv[1:]))
+
+if good == None:
+    exit("ERROR: Validate the input")
 
 ip = argv[1].split("/")[0].split(".")   # 192.168.1.0/24 2 8 22 54  -> list of str ['192','168','1','0']
 cidr = int(argv[1].split("/")[1])       # 192.168.1.0/24 2 8 22 54  -> str 24
